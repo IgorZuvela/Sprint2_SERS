@@ -1,0 +1,36 @@
+const int ledVermelho = 3;   
+const int ledVerde = 2;
+const int ledAmarelo = 4;
+const int botao = 5;
+const int potenciometro = A0;
+
+bool estadoBotao = false;
+
+void setup() {
+  pinMode(ledVermelho, OUTPUT);
+  pinMode(ledVerde, OUTPUT);
+  pinMode(ledAmarelo, OUTPUT);
+  pinMode(botao, INPUT_PULLUP);
+}
+
+void loop() {
+  int valorPot = analogRead(potenciometro);
+  int brilho = map(valorPot, 0, 1023, 0, 255);
+  analogWrite(ledVermelho, brilho);
+
+  if (digitalRead(botao) == LOW) {
+    delay(200);
+    estadoBotao = !estadoBotao;
+  }
+
+  if (estadoBotao) {
+    digitalWrite(ledVerde, HIGH);
+    digitalWrite(ledAmarelo, LOW);
+  } else {
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledAmarelo, HIGH);
+  }
+  
+  Serial.println(valorPot);
+  Serial.println(estadoBotao);
+}

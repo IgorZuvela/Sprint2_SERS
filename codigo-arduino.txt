@@ -11,6 +11,7 @@ void setup() {
   pinMode(ledVerde, OUTPUT);
   pinMode(ledAmarelo, OUTPUT);
   pinMode(botao, INPUT_PULLUP);
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -18,11 +19,13 @@ void loop() {
   int brilho = map(valorPot, 0, 1023, 0, 255);
   analogWrite(ledVermelho, brilho);
 
+  
   if (digitalRead(botao) == LOW) {
     delay(200);
     estadoBotao = !estadoBotao;
   }
 
+  
   if (estadoBotao) {
     digitalWrite(ledVerde, HIGH);
     digitalWrite(ledAmarelo, LOW);
@@ -30,7 +33,20 @@ void loop() {
     digitalWrite(ledVerde, LOW);
     digitalWrite(ledAmarelo, HIGH);
   }
+
   
-  Serial.println(valorPot);
-  Serial.println(estadoBotao);
+  Serial.print("Valor Potenciometro: ");
+  Serial.print(valorPot);
+  Serial.print(" | Consumo: ");
+  Serial.print((valorPot / 1023.0) * 100);
+  Serial.println("%");
+
+  Serial.print("Estado Botao (assistente): ");
+  if (estadoBotao) {
+    Serial.println("Prioridade Carga (Verde)");
+  } else {
+    Serial.println("Bateria Baixa (Amarelo)");
+  }
+
+  delay(2000); 
 }
